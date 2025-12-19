@@ -1,0 +1,40 @@
+================================
+NHS REFERRAL EMAIL
+================================
+
+Date: 2025-12-17 20:20:21
+
+To: r.evans@heartlandshospital.nhs.uk
+From: d.thompson@birminghamgp.nhs.uk
+Subject: New Patient Referral - 常规
+
+Dear Consultant Evans,
+
+I am writing to refer the following patient for your specialist assessment:
+
+PATIENT DETAILS:
+Name: John Smith
+NHS Number: 1234567890
+Date of Birth: 1985-03-15
+Contact: 07123456789
+
+REFERRAL INFORMATION:
+Referral ID: R1001
+Urgency: 常规
+Reason: 测试转诊
+
+CLINICAL SUMMARY:
+这是测试用的临床摘要
+
+INVESTIGATIONS REQUESTED:
+血液检测
+
+ADDITIONAL NOTES:
+控制器测试
+
+Thank you for your assistance.
+
+Best regards,
+GP Dr. David Thompson
+General Practice
+================================
