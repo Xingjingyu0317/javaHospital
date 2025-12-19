@@ -11,7 +11,7 @@ public class TransferManagePanel extends JPanel {
     private JTable referralTable;
     private DefaultTableModel tableModel;
     private TransferController controller;
-    private JButton refreshBtn, exportBtn, exportEmailBtn;
+    private JButton addBtn, editBtn, deleteBtn, refreshBtn, exportBtn, exportEmailBtn;
 
     public TransferManagePanel() {
         this.controller = new TransferController();
@@ -35,14 +35,23 @@ public class TransferManagePanel extends JPanel {
         panel.add(title, BorderLayout.WEST);
         
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        addBtn = new JButton("Add");
+        editBtn = new JButton("Edit");
+        deleteBtn = new JButton("Delete");
         exportBtn = new JButton("Export Referral");
         exportEmailBtn = new JButton("Generate Email");
         refreshBtn = new JButton("Refresh");
         
+        addBtn.addActionListener(e -> addReferral());
+        editBtn.addActionListener(e -> editReferral());
+        deleteBtn.addActionListener(e -> deleteReferral());
         exportBtn.addActionListener(e -> exportReferral());
         exportEmailBtn.addActionListener(e -> generateEmail());
         refreshBtn.addActionListener(e -> loadReferrals());
         
+        buttonPanel.add(addBtn);
+        buttonPanel.add(editBtn);
+        buttonPanel.add(deleteBtn);
         buttonPanel.add(exportBtn);
         buttonPanel.add(exportEmailBtn);
         buttonPanel.add(refreshBtn);
@@ -88,6 +97,97 @@ public class TransferManagePanel extends JPanel {
                 ref.getStatus()
             };
             tableModel.addRow(row);
+        }
+    }
+
+    private void addReferral() {
+        TransferEditDialog dialog = new TransferEditDialog(
+            (Frame) SwingUtilities.getWindowAncestor(this), null);
+        dialog.setVisible(true);
+        
+        if (dialog.isConfirmed()) {
+            Referral newReferral = dialog.getReferral();
+            if (controller.submitReferral(newReferral)) {
+                loadReferrals();
+                JOptionPane.showMessageDialog(this,
+                    "Referral added successfully",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "Failed to add referral",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void editReferral() {
+        int selectedRow = referralTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this,
+                "Please select a referral to edit",
+                "Warning",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String referralId = (String) tableModel.getValueAt(selectedRow, 0);
+        Referral referral = controller.getById(referralId);
+        
+        if (referral != null) {
+            TransferEditDialog dialog = new TransferEditDialog(
+                (Frame) SwingUtilities.getWindowAncestor(this), referral);
+            dialog.setVisible(true);
+            
+            if (dialog.isConfirmed()) {
+                if (controller.updateStatus(referral.getReferralId(), referral.getStatus())) {
+                    loadReferrals();
+                    JOptionPane.showMessageDialog(this,
+                        "Referral updated successfully",
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                        "Failed to update referral",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }
+
+    private void deleteReferral() {
+        int selectedRow = referralTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this,
+                "Please select a referral to delete",
+                "Warning",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String referralId = (String) tableModel.getValueAt(selectedRow, 0);
+        
+        int confirm = JOptionPane.showConfirmDialog(this,
+            "Delete referral: " + referralId + "?",
+            "Confirm",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE);
+        
+        if (confirm == JOptionPane.YES_OPTION) {
+            if (controller.removeReferral(referralId)) {
+                loadReferrals();
+                JOptionPane.showMessageDialog(this,
+                    "Referral deleted successfully",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "Failed to delete referral",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 

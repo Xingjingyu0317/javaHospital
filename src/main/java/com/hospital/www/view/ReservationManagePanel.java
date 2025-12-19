@@ -11,7 +11,7 @@ public class ReservationManagePanel extends JPanel {
     private JTable appointTable;
     private DefaultTableModel tableModel;
     private ReservationController controller;
-    private JButton refreshBtn;
+    private JButton addBtn, editBtn, deleteBtn, refreshBtn;
 
     public ReservationManagePanel() {
         this.controller = new ReservationController();
@@ -35,8 +35,19 @@ public class ReservationManagePanel extends JPanel {
         panel.add(titleLabel, BorderLayout.WEST);
         
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        addBtn = new JButton("Add");
+        editBtn = new JButton("Edit");
+        deleteBtn = new JButton("Delete");
         refreshBtn = new JButton("Refresh");
+        
+        addBtn.addActionListener(e -> addAppointment());
+        editBtn.addActionListener(e -> editAppointment());
+        deleteBtn.addActionListener(e -> deleteAppointment());
         refreshBtn.addActionListener(e -> loadAppointments());
+        
+        btnPanel.add(addBtn);
+        btnPanel.add(editBtn);
+        btnPanel.add(deleteBtn);
         btnPanel.add(refreshBtn);
         
         panel.add(btnPanel, BorderLayout.EAST);
@@ -81,6 +92,99 @@ public class ReservationManagePanel extends JPanel {
                 apt.getReasonForVisit()
             };
             tableModel.addRow(row);
+        }
+    }
+
+    private void addAppointment() {
+        ReservationEditDialog dialog = new ReservationEditDialog(
+            (Frame) SwingUtilities.getWindowAncestor(this), null);
+        dialog.setVisible(true);
+        
+        if (dialog.isConfirmed()) {
+            Appointment newAppointment = dialog.getAppointment();
+            if (controller.add(newAppointment)) {
+                loadAppointments();
+                JOptionPane.showMessageDialog(this,
+                    "Appointment added successfully",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "Failed to add appointment",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void editAppointment() {
+        int selectedRow = appointTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this,
+                "Please select an appointment to edit",
+                "Warning",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String appointmentId = (String) tableModel.getValueAt(selectedRow, 0);
+        Appointment appointment = controller.getAll().stream()
+            .filter(a -> a.getAppointmentId().equals(appointmentId))
+            .findFirst().orElse(null);
+        
+        if (appointment != null) {
+            ReservationEditDialog dialog = new ReservationEditDialog(
+                (Frame) SwingUtilities.getWindowAncestor(this), appointment);
+            dialog.setVisible(true);
+            
+            if (dialog.isConfirmed()) {
+                if (controller.modify(appointment)) {
+                    loadAppointments();
+                    JOptionPane.showMessageDialog(this,
+                        "Appointment updated successfully",
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                        "Failed to update appointment",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }
+
+    private void deleteAppointment() {
+        int selectedRow = appointTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this,
+                "Please select an appointment to delete",
+                "Warning",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String appointmentId = (String) tableModel.getValueAt(selectedRow, 0);
+        
+        int confirm = JOptionPane.showConfirmDialog(this,
+            "Delete appointment: " + appointmentId + "?",
+            "Confirm",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE);
+        
+        if (confirm == JOptionPane.YES_OPTION) {
+            if (controller.remove(appointmentId)) {
+                loadAppointments();
+                JOptionPane.showMessageDialog(this,
+                    "Appointment deleted successfully",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "Failed to delete appointment",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 

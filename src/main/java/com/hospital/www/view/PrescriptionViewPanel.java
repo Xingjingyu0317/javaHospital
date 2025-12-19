@@ -11,7 +11,7 @@ public class PrescriptionViewPanel extends JPanel {
     private JTable prescriptionTable;
     private DefaultTableModel tableModel;
     private PrescriptionController controller;
-    private JButton refreshBtn, exportBtn;
+    private JButton addBtn, editBtn, deleteBtn, refreshBtn, exportBtn;
 
     public PrescriptionViewPanel() {
         this.controller = new PrescriptionController();
@@ -35,12 +35,21 @@ public class PrescriptionViewPanel extends JPanel {
         panel.add(title, BorderLayout.WEST);
         
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        addBtn = new JButton("Add");
+        editBtn = new JButton("Edit");
+        deleteBtn = new JButton("Delete");
         exportBtn = new JButton("Export to File");
         refreshBtn = new JButton("Refresh");
         
+        addBtn.addActionListener(e -> addPrescription());
+        editBtn.addActionListener(e -> editPrescription());
+        deleteBtn.addActionListener(e -> deletePrescription());
         exportBtn.addActionListener(e -> exportPrescription());
         refreshBtn.addActionListener(e -> loadPrescriptions());
         
+        buttonPanel.add(addBtn);
+        buttonPanel.add(editBtn);
+        buttonPanel.add(deleteBtn);
         buttonPanel.add(exportBtn);
         buttonPanel.add(refreshBtn);
         
@@ -86,6 +95,97 @@ public class PrescriptionViewPanel extends JPanel {
                 rx.getStatus()
             };
             tableModel.addRow(row);
+        }
+    }
+
+    private void addPrescription() {
+        PrescriptionEditDialog dialog = new PrescriptionEditDialog(
+            (Frame) SwingUtilities.getWindowAncestor(this), null);
+        dialog.setVisible(true);
+        
+        if (dialog.isConfirmed()) {
+            Prescription newPrescription = dialog.getPrescription();
+            if (controller.createPrescription(newPrescription)) {
+                loadPrescriptions();
+                JOptionPane.showMessageDialog(this,
+                    "Prescription added successfully",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "Failed to add prescription",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void editPrescription() {
+        int selectedRow = prescriptionTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this,
+                "Please select a prescription to edit",
+                "Warning",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String prescriptionId = (String) tableModel.getValueAt(selectedRow, 0);
+        Prescription prescription = controller.findById(prescriptionId);
+        
+        if (prescription != null) {
+            PrescriptionEditDialog dialog = new PrescriptionEditDialog(
+                (Frame) SwingUtilities.getWindowAncestor(this), prescription);
+            dialog.setVisible(true);
+            
+            if (dialog.isConfirmed()) {
+                if (controller.updatePrescription(prescription)) {
+                    loadPrescriptions();
+                    JOptionPane.showMessageDialog(this,
+                        "Prescription updated successfully",
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                        "Failed to update prescription",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }
+
+    private void deletePrescription() {
+        int selectedRow = prescriptionTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this,
+                "Please select a prescription to delete",
+                "Warning",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String prescriptionId = (String) tableModel.getValueAt(selectedRow, 0);
+        
+        int confirm = JOptionPane.showConfirmDialog(this,
+            "Delete prescription: " + prescriptionId + "?",
+            "Confirm",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE);
+        
+        if (confirm == JOptionPane.YES_OPTION) {
+            if (controller.deletePrescription(prescriptionId)) {
+                loadPrescriptions();
+                JOptionPane.showMessageDialog(this,
+                    "Prescription deleted successfully",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "Failed to delete prescription",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
