@@ -30,11 +30,13 @@ public class HospitalMainFrame extends JFrame {
         ClinicianManagePanel clinicianPanel = new ClinicianManagePanel();
         ReservationManagePanel reservationPanel = new ReservationManagePanel();
         PrescriptionViewPanel prescriptionPanel = new PrescriptionViewPanel();
+        TransferManagePanel referralPanel = new TransferManagePanel();
         
         tabbedPane.addTab("Patients", patientPanel);
         tabbedPane.addTab("Clinicians", clinicianPanel);
         tabbedPane.addTab("Reservation", reservationPanel);
         tabbedPane.addTab("Prescriptions", prescriptionPanel);
+        tabbedPane.addTab("Referrals", referralPanel);
         
         add(tabbedPane, BorderLayout.CENTER);
     }
