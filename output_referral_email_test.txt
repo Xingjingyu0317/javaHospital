@@ -1,0 +1,40 @@
+================================
+NHS REFERRAL EMAIL
+================================
+
+Date: 2025-12-17 19:57:59
+
+To: r.evans@heartlandshospital.nhs.uk
+From: d.thompson@birminghamgp.nhs.uk
+Subject: New Patient Referral - Urgent
+
+Dear Consultant Evans,
+
+I am writing to refer the following patient for your specialist assessment:
+
+PATIENT DETAILS:
+Name: John Smith
+NHS Number: 1234567890
+Date of Birth: 1985-03-15
+Contact: 07123456789
+
+REFERRAL INFORMATION:
+Referral ID: R1001
+Urgency: Urgent
+Reason: Test referral
+
+CLINICAL SUMMARY:
+This is a test referral for system verification
+
+INVESTIGATIONS REQUESTED:
+Blood test|X-ray
+
+ADDITIONAL NOTES:
+Testing singleton pattern
+
+Thank you for your assistance.
+
+Best regards,
+GP Dr. David Thompson
+General Practice
+================================

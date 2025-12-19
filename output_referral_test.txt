@@ -1,0 +1,30 @@
+================================
+NHS REFERRAL LETTER
+================================
+
+Referral ID: R1001
+Date: 2025-12-17
+Urgency: Urgent
+
+PATIENT INFORMATION:
+Patient ID: P001
+
+REFERRAL DETAILS:
+From: Clinician ID C001 (Facility: S001)
+To: Clinician ID C005 (Facility: H001)
+
+REASON FOR REFERRAL:
+Test referral
+
+CLINICAL SUMMARY:
+This is a test referral for system verification
+
+REQUESTED INVESTIGATIONS:
+Blood test|X-ray
+
+STATUS: New
+
+NOTES:
+Testing singleton pattern
+
+================================

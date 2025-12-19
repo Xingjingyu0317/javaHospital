@@ -1,0 +1,23 @@
+================================
+NHS PRESCRIPTION
+================================
+
+Prescription ID: RX001
+Patient ID: P001
+Clinician ID: C001
+Date: 2025-09-20
+
+MEDICATION DETAILS:
+Medication: Simvastatin
+Dosage: 20mg
+Frequency: Once daily
+Duration: 28 days
+Quantity: 28 tablets
+
+INSTRUCTIONS:
+Take with evening meal
+
+Pharmacy: Boots Pharmacy Birmingham
+Status: Issued
+Issue Date: 2025-09-20
+================================
