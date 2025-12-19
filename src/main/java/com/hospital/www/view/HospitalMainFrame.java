@@ -10,8 +10,8 @@ public class HospitalMainFrame extends JFrame {
 
     public HospitalMainFrame() {
         this.dataManager = DataManager.getInstance();
-        initializeUI();
         loadData();
+        initializeUI();
     }
 
     private void initializeUI() {
