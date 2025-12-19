@@ -1,7 +1,7 @@
 package com.hospital.www.controller;
 
 import com.hospital.www.model.Clinician;
-import com.hospital.www.utils.DataManager;
+import com.hospital.www.service.DataManager;
 import java.util.ArrayList;
 import java.util.List;
 

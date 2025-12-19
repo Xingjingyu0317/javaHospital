@@ -1,7 +1,7 @@
 package com.hospital.www.controller;
 
 import com.hospital.www.model.Prescription;
-import com.hospital.www.utils.DataManager;
+import com.hospital.www.service.DataManager;
 import com.hospital.www.utils.CSVWriter;
 import java.util.ArrayList;
 import java.util.List;

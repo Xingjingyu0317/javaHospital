@@ -3,9 +3,9 @@ package com.hospital.www.controller;
 import com.hospital.www.model.Referral;
 import com.hospital.www.model.Patient;
 import com.hospital.www.model.Clinician;
-import com.hospital.www.singleton.ReferralManager;
-import com.hospital.www.singleton.EmailService;
-import com.hospital.www.utils.DataManager;
+import com.hospital.www.service.ReferralManager;
+import com.hospital.www.service.EmailService;
+import com.hospital.www.service.DataManager;
 import com.hospital.www.utils.CSVWriter;
 import java.util.List;
 
